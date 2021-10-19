@@ -4,6 +4,7 @@ import com.sbx.sh.MySQLToHdfs;
 import com.sbx.sh.OdsCreateTable;
 import com.sbx.utils.Common;
 import com.sbx.utils.JDBCUtils;
+import jdk.internal.org.objectweb.asm.commons.StaticInitMerger;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
@@ -52,8 +53,34 @@ public class App {
         System.out.println(tail);*/
 //        String s = MySQLToHdfs.selectFieldsOfEachTable("datangpo");
 //        Common.stringWriteTxt("E:\\sbx\\mysqlTohdfs/test.txt",s)"
-        String s = HdfsToOds.splicingHdfsToHive("geo_standard");
+     /*   String s = HdfsToOds.splicingHdfsToHive("geo_standard");
         Common.stringWriteTxt("E:\\sbx\\mysqlTohdfs/geo_standard_hdfsToHive.sh",s);
+        System.out.println(s);*/
+//        createODS("quantyu");
+//        mysqlToHDFS("quantyu");
+        hdfsToOds("quantyu");
+    }
+
+
+    /**
+     * hive ods 创建表的脚本
+     * @param databaseName
+     */
+    public static void createODS(String databaseName){
+        String sql = OdsCreateTable.selectFieldTypesOfEachTable(databaseName);
+        Common.stringWriteTxt("D:\\CloudPBigData\\中核hive脚本/odsQuantyu.txt",sql);
+        System.out.println(sql);
+    }
+    public static void mysqlToHDFS(String databaseName){
+        String sql = MySQLToHdfs.selectFieldsOfEachTable(databaseName);
+        Common.stringWriteTxt("D:\\CloudPBigData\\中核hive脚本/mysqlToHDFS.sh",sql);
+        System.out.println(sql);
+    }
+    public static void hdfsToOds(String databaseName){
+        String s = HdfsToOds.splicingHdfsToHive(databaseName);
+        Common.stringWriteTxt("D:\\CloudPBigData\\中核hive脚本/hdfsToHive.sh",s);
         System.out.println(s);
     }
+
+
 }

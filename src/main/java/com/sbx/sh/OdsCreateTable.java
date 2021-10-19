@@ -32,22 +32,26 @@ public class OdsCreateTable {
             StringBuilder builder = new StringBuilder();
             String tableName = (String) tableMap.get("TABLE_NAME");
             String newTableName = "ods_" + tableName;
-            builder.append(header +newTableName + ";\n" + mid +newTableName+"\n"+"(\n");
+            builder.append(header + newTableName + ";\n" + mid + newTableName + "\n" + "(\n");
             List<Map<String, Object>> columnNameAnTypeList = Common.selectColumnNameAndType(databaseName, tableName);
             for (int i = 0; i < columnNameAnTypeList.size(); i++) {
                 String columnName = (String) columnNameAnTypeList.get(i).get("COLUMN_NAME");
                 String columnType = (String) columnNameAnTypeList.get(i).get("COLUMN_TYPE");
-                if (columnType.contains("int") || columnType.contains("double")||columnName.contains("decimal")) {
-                    builder.append("    "+columnName+"  "+columnType+",\n");
-                }else if(columnType.equals("datetime")){
-                    builder.append("    "+columnName+"  "+"DATE"+",\n");
-                }else{
-                    builder.append("    "+columnName+"  "+"string"+",\n");
+                if (columnType.contains("bigint")) {
+                    builder.append("    `" + columnName + "`  " + "bigint" + ",\n");
+                } else if (columnType.contains("int")) {
+                    builder.append("    `" + columnName + "`  " + "int" + ",\n");
+                } else if (columnType.contains("double") || columnName.contains("decimal")) {
+                    builder.append("    `" + columnName + "`  " + columnType + ",\n");
+                } else if (columnType.equals("datetime")) {
+                    builder.append("    `" + columnName + "`  " + "DATE" + ",\n");
+                } else {
+                    builder.append("    `" + columnName + "`  " + "string" + ",\n");
                 }
             }
             int len = builder.length();
-            builder.delete(len-2,len-1);
-            builder.append(")\n"+tail+databaseName+"/ods/"+newTableName+"\';\n");
+            builder.delete(len - 2, len - 1);
+            builder.append(")\n" + tail + databaseName + "/ods/" + newTableName + "\';\n");
             resBuilder.append(builder.toString());
         }
         return resBuilder.toString();
